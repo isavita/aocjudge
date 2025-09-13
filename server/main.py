@@ -20,10 +20,10 @@ CONTRACT_TEXT = (
 @mcp.tool()
 def aoc_info() -> dict:
     """
-    Get server info, supported languages, and agent instructions.
+    Get server info, supported languages (including pre-installed libraries), and agent instructions.
     
     Returns:
-        Dictionary containing server status, case count, supported languages, and instructions
+        Dictionary containing server status, case count, supported languages (with pre-installed libraries), and instructions
     """
     return {
         "ok": True,
@@ -80,6 +80,7 @@ def aoc_get_case(name: str, include: Optional[List[str]] = None) -> dict:
 def aoc_eval(name: str, language: Literal[*LANGS.keys()], code: str) -> dict:
     """
     Evaluate user code against a specific Advent of Code case.
+    You can use pre-installed libraries for each language.
     
     Args:
         name: The case identifier (e.g., "day1_part1_2017")
