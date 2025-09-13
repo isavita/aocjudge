@@ -17,28 +17,52 @@ CONTRACT_TEXT = (
     "and print ONLY the final answer to stdout. Stdin is NOT provided."
 )
 
-@mcp.tool
-def aoc_health() -> dict:
-    """Health & contract info for agents."""
+@mcp.tool()
+def aoc_info() -> dict:
+    """
+    Get server info, supported languages, and agent instructions.
+    
+    Returns:
+        Dictionary containing server status, case count, supported languages, and instructions
+    """
     return {
         "ok": True,
         "cases": len(ds.all),
         "server": NAME,
         "supported_languages": SUPPORTED_LANGUAGES,
-        "contract": CONTRACT_TEXT,
+        "agent_instructions": CONTRACT_TEXT,
     }
 
-@mcp.tool
-def aoc_list_cases(year: Optional[int]=None, day: Optional[int]=None, part: Optional[int]=None) -> dict:
-    """List cases; optional filters year/day/part."""
-    items = ds.list(year=year, day=day, part=part)
-    return {"items": items, "total": len(items)}
-
-@mcp.tool
-def aoc_get_case(name: str) -> dict:
+@mcp.tool()
+def aoc_list_cases(year: Optional[int] = None, day: Optional[int] = None, part: Optional[int] = None) -> dict:
     """
-    Get only the case metadata and task text.
-    Input and answer are intentionally NOT exposed by this API.
+    List available Advent of Code cases with optional filtering.
+    
+    Args:
+        year: Filter by specific year (e.g., 2017, 2018)
+        day: Filter by specific day (1-25)
+        part: Filter by specific part (1 or 2)
+    
+    Returns:
+        Dictionary containing filtered cases and total count
+    """
+    items = ds.list(year=year, day=day, part=part)
+    return {"items": items, "total": len(items), "agent_instructions": CONTRACT_TEXT}
+
+@mcp.tool()
+def aoc_get_case(name: str, include: Optional[List[str]] = None) -> dict:
+    """
+    Get case metadata and task description for a specific case.
+    
+    Args:
+        name: The case identifier (e.g., "day1_part1_2017")
+        include: Optional list of fields to include (ignored, for compatibility)
+    
+    Returns:
+        Dictionary with case metadata and task description, or error if not found
+    
+    Note:
+        Input and answer are intentionally NOT exposed by this endpoint.
     """
     c = ds.get(name)
     if not c:
@@ -49,15 +73,25 @@ def aoc_get_case(name: str) -> dict:
         "day": c.day,
         "part": c.part,
         "task": c.task,
+        "agent_instructions": CONTRACT_TEXT,
     }
 
-@mcp.tool
+@mcp.tool()
 def aoc_eval(name: str, language: Literal[*SUPPORTED_LANGUAGES], code: str) -> dict:
     """
-    Evaluate user code for a case.
-
-    CONTRACT: Your code must read the input from './input.txt' and print ONLY the answer to stdout.
-    Stdin is NOT provided.
+    Evaluate user code against a specific Advent of Code case.
+    
+    Args:
+        name: The case identifier (e.g., "day1_part1_2017")
+        language: Programming language ("python" or "go")
+        code: The complete source code to evaluate
+    
+    Returns:
+        Dictionary with evaluation results including pass/fail status, output, and any errors
+    
+    CONTRACT:
+        Your code must read the input from './input.txt' and print ONLY the answer to stdout.
+        Stdin is NOT provided.
     """
     c = ds.get(name)
     if not c:
@@ -74,6 +108,7 @@ def aoc_eval(name: str, language: Literal[*SUPPORTED_LANGUAGES], code: str) -> d
         "got": got,
         "exit_code": rc,
         "language": language,
+        "agent_instructions": CONTRACT_TEXT,
     }
     # Helpful guidance on failure
     if not passed:
