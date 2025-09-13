@@ -1,0 +1,3 @@
+{"name":"day1_part1_2017","year":2017,"day":1,"part":1,"task":"Given a sequence of digits, find the sum of all digits that match the next digit in the list. The list is circular, so after the last digit comes the first digit.","input":"1122","answer":"3"}
+{"name":"day1_part2_2017","year":2017,"day":1,"part":2,"task":"Given a sequence of digits, find the sum of all digits that match the digit halfway around the circular list.","input":"1212","answer":"6"}
+{"name":"day2_part1_2017","year":2017,"day":2,"part":1,"task":"Given a spreadsheet of numbers, find the checksum by subtracting the smallest from the largest value in each row, then summing all the differences.","input":"5 1 9 5\n7 5 3\n2 4 6 8","answer":"18"}
