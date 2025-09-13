@@ -20,7 +20,7 @@ def _run_container(image: str, workdir: Path, language: str) -> Tuple[int, str, 
         "-v", f"{str(workdir)}:/app:ro",
         "-w", "/app",
     ]
-    if language == "go":
+    if language in {"go", "d"}:
         cmd.extend(["--tmpfs", "/tmp:exec"])
     cmd.append(image)
     try:
