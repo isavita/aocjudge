@@ -1,4 +1,4 @@
-FROM dlang2/dmd:2.106.0-alpine
+FROM dlanguage/dmd:latest-alpine
 RUN adduser -D -s /bin/sh runner
 USER runner
 WORKDIR /app
