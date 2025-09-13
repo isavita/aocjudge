@@ -13,6 +13,7 @@ SOLUTIONS = {
     "ruby": "s=File.read('./input.txt').strip;f=s.count('(')-s.count(')');puts f",
     "rust": "use std::fs;fn main(){let s=fs::read_to_string(\"./input.txt\").unwrap();let mut f=0;for c in s.chars(){if c=='(' {f+=1;} else if c==')' {f-=1;}}println!(\"{}\",f);}",
     "d": "import std.stdio, std.file;void main(){auto s=readText(\"./input.txt\");int f=0;foreach(c; s){if(c=='(')f++;else if(c==')')f--; }writeln(f);}",
+    "scheme": "(let ((s (call-with-input-file \"./input.txt\" (lambda (p) (read-string 9999 p))))) (let loop ((cs (string->list s)) (f 0)) (if (null? cs) (display f) (let ((c (car cs))) (cond ((char=? c #\\() (loop (cdr cs) (+ f 1))) ((char=? c #\\)) (loop (cdr cs) (- f 1))) (else (loop (cdr cs) f)))))))"
 }
 
 @pytest.mark.parametrize("lang,code", SOLUTIONS.items(), ids=list(SOLUTIONS.keys()))
