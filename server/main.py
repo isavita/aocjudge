@@ -10,7 +10,7 @@ MAX_CODE_CHARS = 10_000_000
 MAX_OUTPUT_CHARS = 4000
 MAX_STDERR_CHARS = 4000
 
-NAME = os.getenv("AOCJUDGE_NAME", "AocJudge")
+NAME = os.getenv("AOCJUDGE_NAME", "AdventOfCodeJudge")
 DATA_PATH = os.getenv("AOCJUDGE_DATA", "data/cases.jsonl")
 
 mcp = FastMCP(NAME)
