@@ -140,7 +140,7 @@ The following libraries are pre-installed in the execution environments:
 - **JavaScript**: `lodash`
 - **Ruby**: `nokogiri`
 - **D**: None
-- **Rust**: None
+- **Rust**: `md5`
 
 ## Language-Specific Configurations
 

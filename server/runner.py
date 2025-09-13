@@ -7,9 +7,26 @@ from datetime import datetime
 
 DEFAULT_TIMEOUT_S = int(os.getenv("AOCJUDGE_TIMEOUT_MS", "8000")) / 1000.0  # seconds
 
-def _write_files(tmp: Path, code_filename: str, code: str, input_data: str):
-    (tmp / code_filename).write_text(code, encoding="utf-8")
+def _write_files(tmp: Path, code_filename: str, code: str, input_data: str, language: str):
     (tmp / "input.txt").write_text(input_data, encoding="utf-8")
+    if language == "rust":
+        # Create Cargo project structure
+        src_dir = tmp / "src"
+        src_dir.mkdir()
+        (src_dir / "main.rs").write_text(code, encoding="utf-8")
+        # Create Cargo.toml
+        cargo_toml_content = """\
+[package]
+name = "aoc_solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+md5 = "0.7"
+"""
+        (tmp / "Cargo.toml").write_text(cargo_toml_content, encoding="utf-8")
+    else:
+        (tmp / code_filename).write_text(code, encoding="utf-8")
 
 def _parse_docker_time(s: str) -> datetime | None:
     # Docker's timestamps are RFC3339 with nanoseconds, but Python's fromisoformat
@@ -33,7 +50,14 @@ def _run_container(image: str, workdir: Path, language: str) -> Tuple[int, str, 
     ]
     if language in {"rust", "d"}:
         create_cmd.extend(["--tmpfs", "/tmp:exec,size=64m"])
+
+    if language == "rust":
+        create_cmd.extend(["--entrypoint", "/usr/local/cargo/bin/cargo"])
+
     create_cmd.append(image)
+
+    if language == "rust":
+        create_cmd.extend(["run", "--release", "--quiet"])
 
     try:
         container_id = subprocess.check_output(create_cmd, stderr=subprocess.PIPE, text=True, encoding="utf-8").strip()
@@ -100,5 +124,5 @@ def run_code(language: str, code: str, input_data: str) -> Tuple[int, str, str, 
         return 127, "", f"unsupported language: {language}", {}
     with tempfile.TemporaryDirectory(prefix=f"aocjudge-{language}-") as d:
         tmp = Path(d)
-        _write_files(tmp, cfg["code_filename"], code, input_data)
+        _write_files(tmp, cfg["code_filename"], code, input_data, language)
         return _run_container(cfg["image"], tmp, language)
