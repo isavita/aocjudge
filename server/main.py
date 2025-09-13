@@ -4,7 +4,7 @@ import os
 
 from dataset import Dataset
 from runner import run_code
-from langs import SUPPORTED_LANGUAGES
+from langs import LANGS
 
 NAME = os.getenv("AOCJUDGE_NAME", "AocJudge")
 DATA_PATH = os.getenv("AOCJUDGE_DATA", "data/cases.jsonl")
@@ -29,7 +29,7 @@ def aoc_info() -> dict:
         "ok": True,
         "cases": len(ds.all),
         "server": NAME,
-        "supported_languages": SUPPORTED_LANGUAGES,
+        "languages": LANGS,
         "agent_instructions": CONTRACT_TEXT,
     }
 
@@ -77,7 +77,7 @@ def aoc_get_case(name: str, include: Optional[List[str]] = None) -> dict:
     }
 
 @mcp.tool()
-def aoc_eval(name: str, language: Literal[*SUPPORTED_LANGUAGES], code: str) -> dict:
+def aoc_eval(name: str, language: Literal[*LANGS.keys()], code: str) -> dict:
     """
     Evaluate user code against a specific Advent of Code case.
     

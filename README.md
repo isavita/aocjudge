@@ -132,6 +132,16 @@ ngrok http 8000
 - Non-root user execution
 - Configurable timeout limits
 
+## Pre-installed Libraries
+
+The following libraries are pre-installed in the execution environments:
+
+- **Python**: `numpy`, `pandas`
+- **JavaScript**: `lodash`
+- **Ruby**: `nokogiri`
+- **D**: None
+- **Rust**: None
+
 ## Language-Specific Configurations
 
 ### Rust
