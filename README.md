@@ -1,4 +1,4 @@
-# AocJudge
+# AdventOfCodeJudge
 
 A FastMCP-based Advent of Code judging system that runs user code in Docker containers for safe execution.
 
@@ -11,6 +11,7 @@ Copyright (c) 2025 Aleksandar Dimov
 ## Project Structure
 
 ```
+
 aocjudge/
 ├── server/
 │   ├── main.py          # FastMCP HTTP server + tools
@@ -28,6 +29,7 @@ aocjudge/
 ├── .env.example        # Configuration template
 ├── LICENSE             # MIT License
 └── README.md           # This file
+
 ```
 
 ## Setup
@@ -51,6 +53,7 @@ docker build -t aocjudge-rs -f docker/rust.Dockerfile .
 docker build -t aocjudge-py -f docker/python.Dockerfile .
 docker build -t aocjudge-js -f docker/javascript.Dockerfile .
 docker build -t aocjudge-rb -f docker/ruby.Dockerfile .
+docker build -t aocjudge-d  -f docker/d.Dockerfile .
 ```
 
 ### 3. Configure Environment
@@ -76,31 +79,47 @@ ngrok http 8000
 # Use the https URL in your MCP client: https://<id>.ngrok-free.app/mcp
 ```
 
+## Environment Variables
+
+The server can be configured using the following `AOCJUDGE_*` environment variables:
+
+| Variable              | Default            | Description                               |
+| --------------------- | ------------------ | ----------------------------------------- |
+| `AOCJUDGE_NAME`       | `AdventOfCodeJudge`| Displayed server name                     |
+| `AOCJUDGE_DATA`       | `data/cases.jsonl` | Path to the cases dataset                 |
+| `AOCJUDGE_HOST`       | `127.0.0.1`        | Host interface for the HTTP server        |
+| `AOCJUDGE_PORT`       | `8000`             | Port for the HTTP server                  |
+| `AOCJUDGE_TIMEOUT_MS` | `8000`             | Sandbox execution timeout in milliseconds |
+
 ## Available Tools
 
-- `aoc_info()` - Get server info, supported languages, and agent instructions
-- `aoc_list_cases(year?, day?, part?)` - List cases with optional filters
-- `aoc_get_case(name, include?)` - Get case details
-- `aoc_eval(name, language, code)` - Evaluate user code against a case
+* `aoc_info()` - Get server info, supported languages, and agent instructions
+* `aoc_list_cases(year?, day?, part?)` - List cases with optional filters
+* `aoc_get_case(name, include?)` - Get case details
+* `aoc_eval(name, language, code)` - Evaluate user code against a case
 
 ## Example Usage
 
 ### Server Info
+
 ```json
 {"tool_name":"aoc_info","arguments":{}}
 ```
 
 ### List Cases
+
 ```json
 {"tool_name":"aoc_list_cases","arguments":{"year":2017,"day":1}}
 ```
 
 ### Get Case Details
+
 ```json
 {"tool_name":"aoc_get_case","arguments":{"name":"day1_part1_2017","include":["task","input"]}}
 ```
 
 ### Evaluate Rust Code
+
 ```json
 {
   "tool_name":"aoc_eval",
@@ -113,49 +132,53 @@ ngrok http 8000
 ```
 
 ### Evaluate Python Code
+
 ```json
 {
   "tool_name":"aoc_eval",
   "arguments":{
     "name":"day1_part1_2017",
     "language":"python",
-    "code":"import sys\ns=sys.stdin.read().strip()\nprint(sum(int(s[i]) for i in range(len(s)) if s[i]==s[(i+1)%len(s)]))"
+    "code":"s=open('./input.txt').read().strip()\nprint(sum(int(s[i]) for i in range(len(s)) if s[i]==s[(i+1)%len(s)]))"
   }
 }
 ```
 
 ## Security Features
 
-- Docker containers run with limited resources (256MB RAM, 0.5 CPU)
-- Read-only filesystem mounts
-- No network access
-- Non-root user execution
-- Configurable timeout limits
+* Docker containers run with limited resources (256MB RAM, 0.5 CPU)
+* Read-only filesystem mounts
+* No network access
+* Non-root user execution
+* Configurable timeout limits
 
 ## Pre-installed Libraries
 
 The following libraries are pre-installed in the execution environments:
 
-- **Python**: `numpy`, `pandas`
-- **JavaScript**: `lodash`
-- **Ruby**: `nokogiri`
-- **D**: None
-- **Rust**: None
+* **Python**: `numpy`, `pandas`
+* **JavaScript**: `lodash`
+* **Ruby**: `nokogiri`
+* **D**: None
+* **Rust**: None
 
 ## Language-Specific Configurations
 
 ### Rust
-- Uses a temporary filesystem at `/tmp` with execution permissions
-- Required for Rust's compilation process and temporary file operations
-- Configured via `--tmpfs /tmp:exec` Docker option
+
+* Uses a temporary filesystem at `/tmp` with execution permissions
+* Required for Rust's compilation process and temporary file operations
+* Configured via `--tmpfs /tmp:exec` Docker option
 
 ### Python
-- Runs in read-only environment
-- No additional filesystem modifications required
+
+* Runs in read-only environment
+* No additional filesystem modifications required
 
 ### Ruby
-- Runs in read-only environment
-- No additional filesystem modifications required
+
+* Runs in read-only environment
+* No additional filesystem modifications required
 
 ## Adding Test Cases
 

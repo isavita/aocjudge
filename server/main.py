@@ -6,7 +6,11 @@ from dataset import Dataset
 from runner import run_code
 from langs import LANGS
 
-NAME = os.getenv("AOCJUDGE_NAME", "AocJudge")
+MAX_CODE_CHARS = 10_000_000
+MAX_OUTPUT_CHARS = 4000
+MAX_STDERR_CHARS = 4000
+
+NAME = os.getenv("AOCJUDGE_NAME", "AdventOfCodeJudge")
 DATA_PATH = os.getenv("AOCJUDGE_DATA", "data/cases.jsonl")
 
 mcp = FastMCP(NAME)
@@ -97,12 +101,15 @@ def aoc_eval(name: str, language: Literal[*LANGS.keys()], code: str) -> dict:
     c = ds.get(name)
     if not c:
         return {"error": f"case not found: {name}"}
+    if len(code) > MAX_CODE_CHARS:
+        return {"error": f"code too long: {len(code)} > {MAX_CODE_CHARS}"}
 
     rc, out, err, metrics = run_code(language, code, c.input)
 
-    got = (out or "").strip()
+    full_output = (out or "").strip()
+    got = full_output[:MAX_OUTPUT_CHARS]
     expected = str(c.answer).strip()
-    passed = (rc == 0) and (got == expected)
+    passed = (rc == 0) and (full_output == expected)
 
     resp: Dict[str, Any] = {
         "pass": passed,
@@ -115,8 +122,9 @@ def aoc_eval(name: str, language: Literal[*LANGS.keys()], code: str) -> dict:
     # Helpful guidance on failure
     if not passed:
         resp["hint"] = "Ensure your program reads from './input.txt' and prints only the final answer."
-    if err.strip():
-        resp["stderr"] = err.strip()
+    err = err.strip()
+    if err:
+        resp["stderr"] = err[:MAX_STDERR_CHARS]
     return resp
 
 if __name__ == "__main__":
