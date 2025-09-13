@@ -10,7 +10,7 @@ def _write_files(tmp: Path, code_filename: str, code: str, input_data: str):
     (tmp / code_filename).write_text(code, encoding="utf-8")
     (tmp / "input.txt").write_text(input_data, encoding="utf-8")
 
-def _run_container(image: str, workdir: Path, language: str) -> Tuple[int, str, str]:
+def _run_container(image: str, workdir: Path, language: str):
     cmd = [
         "docker", "run", "--rm",
         "--network", "none",
@@ -20,8 +20,8 @@ def _run_container(image: str, workdir: Path, language: str) -> Tuple[int, str, 
         "-v", f"{str(workdir)}:/app:ro",
         "-w", "/app",
     ]
-    if language in {"go", "d"}:
-        cmd.extend(["--tmpfs", "/tmp:exec"])
+    if language in {"rust", "d"}:
+        cmd.extend(["--tmpfs", "/tmp:exec,size=64m"])
     cmd.append(image)
     try:
         # IMPORTANT: No stdin is provided. Code must read ./input.txt.
