@@ -46,6 +46,7 @@ pip install -r requirements.txt
 # Build sandbox images (run once)
 docker build -t aocjudge-go -f docker/go.Dockerfile .
 docker build -t aocjudge-py -f docker/python.Dockerfile .
+docker build -t aocjudge-js -f docker/javascript.Dockerfile .
 ```
 
 ### 3. Configure Environment
