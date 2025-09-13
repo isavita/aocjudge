@@ -10,7 +10,7 @@ def _write_files(tmp: Path, code_filename: str, code: str, input_data: str):
     (tmp / code_filename).write_text(code, encoding="utf-8")
     (tmp / "input.txt").write_text(input_data, encoding="utf-8")
 
-def _run_container(image: str, workdir: Path) -> Tuple[int, str, str]:
+def _run_container(image: str, workdir: Path, language: str) -> Tuple[int, str, str]:
     cmd = [
         "docker", "run", "--rm",
         "--network", "none",
@@ -19,8 +19,10 @@ def _run_container(image: str, workdir: Path) -> Tuple[int, str, str]:
         "--read-only",
         "-v", f"{str(workdir)}:/app:ro",
         "-w", "/app",
-        image,  # ENTRYPOINT in the image executes the code
     ]
+    if language == "go":
+        cmd.extend(["--tmpfs", "/tmp:exec"])
+    cmd.append(image)
     try:
         # IMPORTANT: No stdin is provided. Code must read ./input.txt.
         proc = subprocess.run(
@@ -42,5 +44,5 @@ def run_code(language: str, code: str, input_data: str):
     with tempfile.TemporaryDirectory(prefix=f"aocjudge-{language}-") as d:
         tmp = Path(d)
         _write_files(tmp, cfg["code_filename"], code, input_data)
-        rc, out, err = _run_container(cfg["image"], tmp)
+        rc, out, err = _run_container(cfg["image"], tmp, language)
         return rc, out, err
