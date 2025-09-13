@@ -19,8 +19,11 @@ aocjudge/
 ├── data/
 │   └── cases.jsonl      # Test cases: name,year,day,part,task,input,answer
 ├── docker/
-│   ├── go.Dockerfile    # Go execution environment
+│   ├── rust.Dockerfile    # Rust execution environment
 │   └── python.Dockerfile # Python execution environment
+│   └── javascript.Dockerfile # JavaScript execution environment
+│   └── ruby.Dockerfile # Ruby execution environment
+│   └── d.Dockerfile # D execution environment
 ├── requirements.txt     # Python dependencies
 ├── .env.example        # Configuration template
 ├── LICENSE             # MIT License
@@ -44,7 +47,7 @@ pip install -r requirements.txt
 
 ```bash
 # Build sandbox images (run once)
-docker build -t aocjudge-go -f docker/go.Dockerfile .
+docker build -t aocjudge-rs -f docker/rust.Dockerfile .
 docker build -t aocjudge-py -f docker/python.Dockerfile .
 docker build -t aocjudge-js -f docker/javascript.Dockerfile .
 docker build -t aocjudge-rb -f docker/ruby.Dockerfile .
@@ -97,14 +100,14 @@ ngrok http 8000
 {"tool_name":"aoc_get_case","arguments":{"name":"day1_part1_2017","include":["task","input"]}}
 ```
 
-### Evaluate Go Code
+### Evaluate Rust Code
 ```json
 {
   "tool_name":"aoc_eval",
   "arguments":{
     "name":"day1_part1_2017",
-    "language":"go",
-    "code":"package main\nimport(\"bufio\";\"fmt\";\"os\")\nfunc main(){in:=bufio.NewScanner(os.Stdin);in.Scan();s:=in.Text();sum:=0;for i:=0;i<len(s);i++{if s[i]==s[(i+1)%len(s)]{sum+=int(s[i]-'0')}};fmt.Println(sum)}"
+    "language":"rust",
+    "code":"use std::fs;fn main(){let s=fs::read_to_string(\"./input.txt\").unwrap();let b=s.trim().as_bytes();let mut sum=0;for i in 0..b.len(){if b[i]==b[(i+1)%b.len()]{sum+=(b[i]-b'0') as i32}};println!(\"{}\",sum);}"
   }
 }
 ```
@@ -131,9 +134,9 @@ ngrok http 8000
 
 ## Language-Specific Configurations
 
-### Go
+### Rust
 - Uses a temporary filesystem at `/tmp` with execution permissions
-- Required for Go's compilation process and temporary file operations
+- Required for Rust's compilation process and temporary file operations
 - Configured via `--tmpfs /tmp:exec` Docker option
 
 ### Python
