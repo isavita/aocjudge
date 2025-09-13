@@ -47,6 +47,7 @@ pip install -r requirements.txt
 docker build -t aocjudge-go -f docker/go.Dockerfile .
 docker build -t aocjudge-py -f docker/python.Dockerfile .
 docker build -t aocjudge-js -f docker/javascript.Dockerfile .
+docker build -t aocjudge-rb -f docker/ruby.Dockerfile .
 ```
 
 ### 3. Configure Environment
@@ -136,6 +137,10 @@ ngrok http 8000
 - Configured via `--tmpfs /tmp:exec` Docker option
 
 ### Python
+- Runs in read-only environment
+- No additional filesystem modifications required
+
+### Ruby
 - Runs in read-only environment
 - No additional filesystem modifications required
 

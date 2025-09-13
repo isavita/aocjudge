@@ -6,6 +6,7 @@ LANGS = {
     "go":         {"image": "aocjudge-go", "code_filename": "main.go"},
     "python":     {"image": "aocjudge-py", "code_filename": "main.py"},
     "javascript": {"image": "aocjudge-js", "code_filename": "main.js"},
+    "ruby":       {"image": "aocjudge-rb", "code_filename": "main.rb"},
 }
 
 SUPPORTED_LANGUAGES = sorted(LANGS.keys())
