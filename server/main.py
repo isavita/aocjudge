@@ -18,21 +18,21 @@ CONTRACT_TEXT = (
 )
 
 @mcp.tool
-def aoc_health() -> dict:
-    """Health & contract info for agents."""
+def aoc_info() -> dict:
+    """Get server info, supported languages, and agent instructions."""
     return {
         "ok": True,
         "cases": len(ds.all),
         "server": NAME,
         "supported_languages": SUPPORTED_LANGUAGES,
-        "contract": CONTRACT_TEXT,
+        "agent_instructions": CONTRACT_TEXT,
     }
 
 @mcp.tool
 def aoc_list_cases(year: Optional[int]=None, day: Optional[int]=None, part: Optional[int]=None) -> dict:
     """List cases; optional filters year/day/part."""
     items = ds.list(year=year, day=day, part=part)
-    return {"items": items, "total": len(items)}
+    return {"items": items, "total": len(items), "agent_instructions": CONTRACT_TEXT}
 
 @mcp.tool
 def aoc_get_case(name: str) -> dict:
@@ -49,6 +49,7 @@ def aoc_get_case(name: str) -> dict:
         "day": c.day,
         "part": c.part,
         "task": c.task,
+        "agent_instructions": CONTRACT_TEXT,
     }
 
 @mcp.tool
@@ -74,6 +75,7 @@ def aoc_eval(name: str, language: Literal[*SUPPORTED_LANGUAGES], code: str) -> d
         "got": got,
         "exit_code": rc,
         "language": language,
+        "agent_instructions": CONTRACT_TEXT,
     }
     # Helpful guidance on failure
     if not passed:
