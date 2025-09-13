@@ -14,21 +14,21 @@ Copyright (c) 2025 Aleksandar Dimov
 
 aocjudge/
 ├── server/
-│   ├── main.py          # FastMCP HTTP server + tools
-│   ├── runner.py        # Docker sandbox execution
-│   └── dataset.py       # JSONL case loader
+│   ├── main.py               # FastMCP HTTP server + tools
+│   ├── runner.py             # Docker sandbox execution
+│   └── dataset.py            # JSONL case loader
 ├── data/
-│   └── cases.jsonl      # Test cases: name,year,day,part,task,input,answer
+│   └── cases.jsonl           # Test cases: name, year, day, part, task, input, answer
 ├── docker/
-│   ├── rust.Dockerfile    # Rust execution environment
-│   └── python.Dockerfile # Python execution environment
-│   └── javascript.Dockerfile # JavaScript execution environment
-│   └── ruby.Dockerfile # Ruby execution environment
-│   └── d.Dockerfile # D execution environment
-├── requirements.txt     # Python dependencies
-├── .env.example        # Configuration template
-├── LICENSE             # MIT License
-└── README.md           # This file
+│   ├── rust.Dockerfile       # Rust execution environment
+│   ├── python.Dockerfile     # Python execution environment
+│   ├── javascript.Dockerfile # JavaScript execution environment
+│   ├── ruby.Dockerfile       # Ruby execution environment
+│   └── d.Dockerfile          # D execution environment
+├── requirements.txt          # Python dependencies
+├── .env.example              # Configuration template
+├── LICENSE                   # MIT License
+└── README.md                 # This file
 
 ```
 
@@ -43,6 +43,10 @@ source .venv/bin/activate
 
 # Install Python dependencies
 pip install -r requirements.txt
+pip install pytest
+
+# Run tests
+pytest -q
 ```
 
 ### 2. Build Docker Images
