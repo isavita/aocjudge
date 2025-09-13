@@ -76,6 +76,18 @@ ngrok http 8000
 # Use the https URL in your MCP client: https://<id>.ngrok-free.app/mcp
 ```
 
+## Environment Variables
+
+The server can be configured using the following `AOCJUDGE_*` environment variables:
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `AOCJUDGE_NAME` | `AocJudge` | Displayed server name |
+| `AOCJUDGE_DATA` | `data/cases.jsonl` | Path to the cases dataset |
+| `AOCJUDGE_HOST` | `127.0.0.1` | Host interface for the HTTP server |
+| `AOCJUDGE_PORT` | `8000` | Port for the HTTP server |
+| `AOCJUDGE_TIMEOUT_MS` | `8000` | Sandbox execution timeout in milliseconds |
+
 ## Available Tools
 
 - `aoc_info()` - Get server info, supported languages, and agent instructions
