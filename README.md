@@ -2,6 +2,12 @@
 
 A FastMCP-based Advent of Code judging system that runs user code in Docker containers for safe execution.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025 Aleksandar Dimov
+
 ## Project Structure
 
 ```
@@ -17,6 +23,7 @@ aocjudge/
 │   └── python.Dockerfile # Python execution environment
 ├── requirements.txt     # Python dependencies
 ├── .env.example        # Configuration template
+├── LICENSE             # MIT License
 └── README.md           # This file
 ```
 
