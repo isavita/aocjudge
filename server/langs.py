@@ -9,5 +9,3 @@ LANGS = {
     "ruby":       {"image": "aocjudge-rb", "code_filename": "main.rb", "libs": ["nokogiri"]},
     "d":          {"image": "aocjudge-d",  "code_filename": "main.d", "libs": []},
 }
-
-SUPPORTED_LANGUAGES = sorted(LANGS.keys())
