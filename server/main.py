@@ -97,7 +97,7 @@ def aoc_eval(name: str, language: Literal[*SUPPORTED_LANGUAGES], code: str) -> d
     if not c:
         return {"error": f"case not found: {name}"}
 
-    rc, out, err = run_code(language, code, c.input)
+    rc, out, err, metrics = run_code(language, code, c.input)
 
     got = (out or "").strip()
     expected = str(c.answer).strip()
@@ -108,6 +108,7 @@ def aoc_eval(name: str, language: Literal[*SUPPORTED_LANGUAGES], code: str) -> d
         "got": got,
         "exit_code": rc,
         "language": language,
+        "metrics": metrics,
         "agent_instructions": CONTRACT_TEXT,
     }
     # Helpful guidance on failure
