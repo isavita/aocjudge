@@ -73,16 +73,16 @@ ngrok http 8000
 
 ## Available Tools
 
-- `aoc_health()` - Health check and case count
+- `aoc_info()` - Get server info, supported languages, and agent instructions
 - `aoc_list_cases(year?, day?, part?)` - List cases with optional filters
 - `aoc_get_case(name, include?)` - Get case details
 - `aoc_eval(name, language, code)` - Evaluate user code against a case
 
 ## Example Usage
 
-### Health Check
+### Server Info
 ```json
-{"tool_name":"aoc_health","arguments":{}}
+{"tool_name":"aoc_info","arguments":{}}
 ```
 
 ### List Cases
@@ -126,6 +126,17 @@ ngrok http 8000
 - No network access
 - Non-root user execution
 - Configurable timeout limits
+
+## Language-Specific Configurations
+
+### Go
+- Uses a temporary filesystem at `/tmp` with execution permissions
+- Required for Go's compilation process and temporary file operations
+- Configured via `--tmpfs /tmp:exec` Docker option
+
+### Python
+- Runs in read-only environment
+- No additional filesystem modifications required
 
 ## Adding Test Cases
 
