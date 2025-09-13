@@ -1,4 +1,4 @@
-# AdventOfCodeJudge
+# aocjudge (AdventOfCodeJudge)
 
 A FastMCP-based Advent of Code judging system that runs user code in Docker containers for safe execution.
 
