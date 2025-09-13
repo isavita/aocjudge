@@ -55,7 +55,7 @@ def aoc_eval(name: str, language: Literal["go","python"], code: str) -> dict:
     passed = (rc == 0) and (got == expected)
     resp = {"pass": passed, "got": got, "expected": None if passed else expected, "exit_code": rc}
     if err.strip():
-        resp["stderr"] = err.strip()
+        resp["stderr"] = err.strip()[:2000] # Truncate the error message
     return resp
 
 if __name__ == "__main__":
