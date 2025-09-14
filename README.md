@@ -88,7 +88,7 @@ cp .env.example .env
 
 ```bash
 python server/main.py
-# Server runs on http://127.0.0.1:8000/mcp
+# Server runs on http://localhost:8000/mcp
 ```
 
 ### 5. Expose via ngrok (optional)
@@ -107,7 +107,7 @@ The server can be configured using the following `AOCJUDGE_*` environment variab
 | --------------------- | ------------------ | ----------------------------------------- |
 | `AOCJUDGE_NAME`       | `AdventOfCodeJudge`| Displayed server name                     |
 | `AOCJUDGE_DATA`       | `data/cases.jsonl` | Path to the cases dataset                 |
-| `AOCJUDGE_HOST`       | `127.0.0.1`        | Host interface for the HTTP server        |
+| `AOCJUDGE_HOST`       | `0.0.0.0`         | Host interface for the HTTP server        |
 | `AOCJUDGE_PORT`       | `8000`             | Port for the HTTP server                  |
 | `AOCJUDGE_TIMEOUT_MS` | `8000`             | Sandbox execution timeout in milliseconds |
 

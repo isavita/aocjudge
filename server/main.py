@@ -128,7 +128,7 @@ def aoc_eval(name: str, language: Literal[*LANGS.keys()], code: str) -> dict:
     return resp
 
 if __name__ == "__main__":
-    host = os.getenv("AOCJUDGE_HOST", "127.0.0.1")
+    host = os.getenv("AOCJUDGE_HOST", "0.0.0.0")
     port = int(os.getenv("AOCJUDGE_PORT", "8000"))
     print(f"🚀 {NAME} on http://{host}:{port}/mcp  (HTTP transport)")
     print(f"📜 CONTRACT: {CONTRACT_TEXT}")
