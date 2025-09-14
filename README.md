@@ -218,6 +218,11 @@ The compose file references the `baruh/aocjudge-server` image and the published
 runtime images. Make sure your Railway project has access to Docker Hub if the
 images are private.
 
+When connecting this repository directly in the Railway dashboard, the included
+`Procfile` provides a start command (`python server/main.py`). Add a separate
+service using the `docker:24-dind` image and set `DOCKER_HOST=tcp://dind:2375`
+on the server service so code evaluation works.
+
 
 ## Pre-installed Libraries
 
