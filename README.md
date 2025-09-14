@@ -89,6 +89,13 @@ cp .env.example .env
 ```bash
 python server/main.py
 # Server runs on http://localhost:8000/mcp
+
+# Basic health check
+curl http://localhost:8000/
+# -> {"ok": true, "server": "AdventOfCodeJudge", "endpoint": "/mcp"}
+
+# Hitting /mcp without a proper MCP handshake will return HTTP 400
+# (that's expected when visiting in a browser)
 ```
 
 ### 5. Expose via ngrok (optional)

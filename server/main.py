@@ -16,6 +16,16 @@ DATA_PATH = os.getenv("AOCJUDGE_DATA", "data/cases.jsonl")
 mcp = FastMCP(NAME)
 ds = Dataset(DATA_PATH)
 
+# Simple health check and human-friendly root endpoint
+from starlette.responses import JSONResponse
+
+app = mcp.http_app()
+
+@app.route("/", methods=["GET"])
+async def root(request) -> JSONResponse:
+    """Basic root endpoint to verify the server is running."""
+    return JSONResponse({"ok": True, "server": NAME, "endpoint": "/mcp"})
+
 CONTRACT_TEXT = (
     "Your program MUST read the puzzle input from a local file path './input.txt' "
     "and print ONLY the final answer to stdout. Stdin is NOT provided."
