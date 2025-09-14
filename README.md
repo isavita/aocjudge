@@ -58,6 +58,7 @@ docker build -t aocjudge-py -f docker/python.Dockerfile .
 docker build -t aocjudge-js -f docker/javascript.Dockerfile .
 docker build -t aocjudge-rb -f docker/ruby.Dockerfile .
 docker build -t aocjudge-d  -f docker/d.Dockerfile .
+docker build -t aocjudge-rkt -f docker/racket.Dockerfile .
 ```
 
 ### 3. Configure Environment
@@ -165,6 +166,7 @@ The following libraries are pre-installed in the execution environments:
 * **Ruby**: `nokogiri`
 * **D**: None
 * **Rust**: None
+* **Racket**: None
 
 ## Language-Specific Configurations
 

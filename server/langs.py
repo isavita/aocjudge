@@ -8,6 +8,7 @@ LANGS = {
     "javascript": {"image": "aocjudge-js", "code_filename": "main.js", "libs": ["lodash"]},
     "ruby":       {"image": "aocjudge-rb", "code_filename": "main.rb", "libs": ["nokogiri"]},
     "d":          {"image": "aocjudge-d",  "code_filename": "main.d", "libs": []},
+    "racket":     {"image": "aocjudge-rkt", "code_filename": "main.rkt", "libs": []},
 }
 
 SUPPORTED_LANGUAGES = sorted(LANGS.keys())
