@@ -24,7 +24,8 @@ aocjudge/
 │   ├── python.Dockerfile     # Python execution environment
 │   ├── javascript.Dockerfile # JavaScript execution environment
 │   ├── ruby.Dockerfile       # Ruby execution environment
-│   └── d.Dockerfile          # D execution environment
+│   ├── d.Dockerfile          # D execution environment
+│   └── racket.Dockerfile     # Racket execution environment
 ├── requirements.txt          # Python dependencies
 ├── .env.example              # Configuration template
 ├── LICENSE                   # MIT License
