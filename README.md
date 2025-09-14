@@ -52,14 +52,28 @@ pytest -q
 
 ### 2. Build Docker Images
 
+The runtime images for each language are published on Docker Hub under
+[`baruh/aocjudge-*`](https://hub.docker.com/r/baruh).
+If you want to build them yourself instead, run:
+
 ```bash
 # Build sandbox images (run once)
-docker build -t aocjudge-rs -f docker/rust.Dockerfile .
-docker build -t aocjudge-py -f docker/python.Dockerfile .
-docker build -t aocjudge-js -f docker/javascript.Dockerfile .
-docker build -t aocjudge-rb -f docker/ruby.Dockerfile .
-docker build -t aocjudge-d  -f docker/d.Dockerfile .
-docker build -t aocjudge-rkt -f docker/racket.Dockerfile .
+docker build -t baruh/aocjudge-rs -f docker/rust.Dockerfile .
+docker build -t baruh/aocjudge-py -f docker/python.Dockerfile .
+docker build -t baruh/aocjudge-js -f docker/javascript.Dockerfile .
+docker build -t baruh/aocjudge-rb -f docker/ruby.Dockerfile .
+docker build -t baruh/aocjudge-d  -f docker/d.Dockerfile .
+docker build -t baruh/aocjudge-rkt -f docker/racket.Dockerfile .
+docker build -t baruh/aocjudge-server -f docker/server.Dockerfile .
+
+# Push to Docker Hub
+docker push baruh/aocjudge-rs
+docker push baruh/aocjudge-py
+docker push baruh/aocjudge-js
+docker push baruh/aocjudge-rb
+docker push baruh/aocjudge-d
+docker push baruh/aocjudge-rkt
+docker push baruh/aocjudge-server
 ```
 
 ### 3. Configure Environment
@@ -74,7 +88,14 @@ cp .env.example .env
 
 ```bash
 python server/main.py
-# Server runs on http://127.0.0.1:8000/mcp
+# Server runs on http://localhost:8000/mcp
+
+# Basic health check
+curl http://localhost:8000/
+# -> {"ok": true, "server": "AdventOfCodeJudge", "endpoint": "/mcp"}
+
+# Hitting /mcp without a proper MCP handshake will return HTTP 400
+# (that's expected when visiting in a browser)
 ```
 
 ### 5. Expose via ngrok (optional)
@@ -93,7 +114,7 @@ The server can be configured using the following `AOCJUDGE_*` environment variab
 | --------------------- | ------------------ | ----------------------------------------- |
 | `AOCJUDGE_NAME`       | `AdventOfCodeJudge`| Displayed server name                     |
 | `AOCJUDGE_DATA`       | `data/cases.jsonl` | Path to the cases dataset                 |
-| `AOCJUDGE_HOST`       | `127.0.0.1`        | Host interface for the HTTP server        |
+| `AOCJUDGE_HOST`       | `0.0.0.0`         | Host interface for the HTTP server        |
 | `AOCJUDGE_PORT`       | `8000`             | Port for the HTTP server                  |
 | `AOCJUDGE_TIMEOUT_MS` | `8000`             | Sandbox execution timeout in milliseconds |
 
@@ -157,6 +178,58 @@ The server can be configured using the following `AOCJUDGE_*` environment variab
 * No network access
 * Non-root user execution
 * Configurable timeout limits
+
+## Deployment
+
+The judge server can be deployed anywhere you have access to Docker. A small
+virtual machine or a free-tier provider such as **Fly.io**, **Railway**, or a
+similar host is usually sufficient. You will need enough disk space to store
+the sandbox images (roughly a few hundred megabytes in total).
+
+### 1. Obtain sandbox images
+
+Runtime images are published at Docker Hub under `baruh/aocjudge-*` and will be
+pulled automatically. To build them yourself, run:
+
+```bash
+./scripts/build-images.sh
+# Optionally tag and push each image
+docker tag aocjudge-py baruh/aocjudge-py && docker push baruh/aocjudge-py
+# ...repeat for other languages as needed
+```
+
+### 2. Run with Docker Compose
+
+The project includes a `docker-compose.yml` that runs the server alongside an
+internal Docker daemon. It pulls the published images automatically:
+
+```bash
+docker compose up
+```
+
+The server will be available on <http://localhost:8000/mcp>. In production you
+can publish the port and expose it through your platform's networking or an MCP
+connector.
+
+### 3. Deploy to Railway
+
+Railway can deploy the compose stack directly. After installing the
+[Railway CLI](https://docs.railway.com/reference/cli), run:
+
+```bash
+railway init     # one-time project setup
+railway up       # builds/pulls images and deploys the stack
+```
+
+The compose file references the `baruh/aocjudge-server` image and the published
+runtime images. Make sure your Railway project has access to Docker Hub if the
+images are private.
+
+When connecting this repository directly in the Railway dashboard, the included
+`Procfile` provides a start command (`python server/main.py`). Add a separate
+service using the `docker:24-dind` image and set `DOCKER_HOST=tcp://dind:2375`
+on the server service so code evaluation works.
+
 
 ## Pre-installed Libraries
 
